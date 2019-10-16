@@ -12,12 +12,19 @@ class InputForm extends React.Component {
     address: "",
     bio: "",
     tourinfo: "",
-    rate: 0
+    rate: 0,
+    message: ""
   };
   handleSubmit = event => {
-    event.preventDefault();
-    console.log(this.state);
-    this.props.handleRegistration(this.state);
+    if (this.state.password.length < 8 || this.state.password.length > 20) {
+      this.setState({
+        message: "Make sure the password is between 8 and 20 characters"
+      });
+    } else {
+      event.preventDefault();
+      console.log(this.state);
+      this.props.handleRegistration(this.state);
+    }
   };
 
   handleClose = () => {
@@ -28,7 +35,7 @@ class InputForm extends React.Component {
     this.setState({ [input]: value });
   };
   render() {
-    console.log(this.state);
+    console.log("Message", this.state.message);
     if (this.props.user === "local") {
       return (
         <div className="input-form">
@@ -36,6 +43,7 @@ class InputForm extends React.Component {
             Close
           </p>
           <h1>Local Registration</h1>
+          <p>{this.state.message}</p>
           {local.map((question, i) => (
             <Question
               storeData={this.handleChange}
@@ -63,6 +71,7 @@ class InputForm extends React.Component {
             Close
           </p>
           <h1>Traveler Registration</h1>
+          <p>{this.state.message}</p>
           {traveler.map((question, i) => (
             <Question
               storeData={this.handleChange}
